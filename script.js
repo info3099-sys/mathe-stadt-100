@@ -108,6 +108,7 @@
     progress: { completedMissions: [], completedZones: [] },
     currentZone: null,
     currentMission: null,
+    currentTask: null,
     runTasks: [],
     taskIndex: 0,
     answered: false,
@@ -294,6 +295,52 @@
   function currentGateReward() {
     var idx = Math.max(0, state.taskIndex - 1);
     return GATE_REWARDS[Math.min(idx, GATE_REWARDS.length - 1)];
+  }
+
+  function taskDifficulty(task) {
+    return task && task.difficulty ? task.difficulty : "Mittel";
+  }
+
+  function solutionText(task) {
+    var steps = task && (task.solutionSteps || task.explanation);
+    if (steps && typeof steps === "string") steps = [steps];
+    if (steps && steps.length) {
+      return "Wir schauen zusammen:\n" + steps.join("\n");
+    }
+    return "Fast! Wir schauen zusammen.\nSchau dir die Zahlen noch einmal an.\nRechne Schritt für Schritt.";
+  }
+
+  function readCurrentTask() {
+    var message = document.getElementById("mission-solution");
+    var speechHost = typeof window !== "undefined" ? window : globalThis;
+    if (!speechHost.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") {
+      if (message) {
+        message.textContent = "Vorlesen ist in diesem Browser leider nicht verfügbar.";
+        message.hidden = false;
+      }
+      return;
+    }
+    var task = state.currentTask;
+    if (!task) return;
+    speechHost.speechSynthesis.cancel();
+    var zone = state.currentMission ? getZone(state.currentMission.zoneId) : null;
+    var parts = [];
+    if (zone) parts.push(zone.title);
+    if (task.sceneText) parts.push(task.sceneText);
+    if (task.problemText) parts.push(task.problemText);
+    if (task.question) parts.push(task.question);
+    if (task.answers && task.answers.length) parts.push("Antworten: " + task.answers.join(", "));
+    var utterance = new SpeechSynthesisUtterance(parts.join(". "));
+    utterance.lang = "de-DE";
+    speechHost.speechSynthesis.speak(utterance);
+  }
+
+  function showSolutionPath() {
+    var box = document.getElementById("mission-solution");
+    if (!box || !state.currentTask) return;
+    box.textContent = solutionText(state.currentTask);
+    box.hidden = false;
+    setFinoText("fino-mission-text", "Schritt für Schritt geht es leichter.");
   }
 
   function buildTrainingRun(zoneId) {
@@ -565,12 +612,14 @@
 
   function renderTask() {
     var task = state.runTasks[state.taskIndex];
+    state.currentTask = task;
     state.answered = false;
     setFinoText("fino-mission-text", state.currentMission && state.currentMission.zoneId === "zahlen-tor" ? (state.taskIndex === 0 ? "Komm, wir öffnen das Tor!" : "Noch ein Schlüssel!") : "Schau genau hin.");
     updateMissionBar();
     var elScene = document.getElementById("mission-scene");
     var elProblem = document.getElementById("mission-problem");
     var elQuestion = document.getElementById("mission-question");
+    var elDifficulty = document.getElementById("mission-difficulty");
 
     if (elScene) {
       elScene.textContent = task.sceneText || "";
@@ -583,6 +632,10 @@
     if (elQuestion) {
       elQuestion.textContent = task.question;
     }
+    if (elDifficulty) {
+      elDifficulty.textContent = taskDifficulty(task);
+      elDifficulty.className = "difficulty-label difficulty-label--" + taskDifficulty(task).toLowerCase();
+    }
     var fb = document.getElementById("mission-feedback");
     fb.hidden = true;
     fb.className = "feedback";
@@ -590,6 +643,15 @@
     var elTip = document.getElementById("mission-tip");
     elTip.hidden = true;
     elTip.textContent = "";
+    var elSolution = document.getElementById("mission-solution");
+    if (elSolution) {
+      elSolution.hidden = true;
+      elSolution.textContent = "";
+    }
+    var solutionBtn = document.getElementById("btn-solution-path");
+    if (solutionBtn) {
+      solutionBtn.hidden = true;
+    }
     document.getElementById("btn-mission-next").hidden = true;
     var ans = document.getElementById("mission-answers");
     ans.innerHTML = "";
@@ -633,9 +695,13 @@
       return;
     }
     btn.classList.add("answer-btn--wrong");
-    fb.textContent = task.feedback[chosen] || "Versuch es noch einmal.";
+    fb.textContent = "Fast! " + (task.feedback[chosen] || "Guter Versuch. Nimm dir Zeit.");
     fb.classList.add("feedback--wrong");
-    setFinoText("fino-mission-text", "Schau genau hin.");
+    setFinoText("fino-mission-text", "Guter Versuch. Nimm dir Zeit.");
+    var solutionBtn = document.getElementById("btn-solution-path");
+    if (solutionBtn) {
+      solutionBtn.hidden = false;
+    }
     document.getElementById("btn-mission-next").textContent = "Nochmal versuchen";
     document.getElementById("btn-mission-next").hidden = false;
   }
@@ -745,6 +811,8 @@
       tip.textContent = t.tip;
       tip.hidden = false;
     });
+    document.getElementById("btn-read").addEventListener("click", readCurrentTask);
+    document.getElementById("btn-solution-path").addEventListener("click", showSolutionPath);
     document.getElementById("btn-mission-next").addEventListener("click", nextTask);
     document.getElementById("btn-mission-abort").addEventListener("click", function () {
       if (confirm("Mission wirklich abbrechen?")) {

@@ -133,6 +133,7 @@
             <p class="scene-text" id="mission-scene"></p>
           </div>
           <div class="mission-right">
+            <p class="difficulty-label" id="mission-difficulty"></p>
             <p class="problem-text" id="mission-problem"></p>
             <p class="question" id="mission-question"></p>
           </div>
@@ -142,12 +143,13 @@
           <div class="answers" id="mission-answers" role="group" aria-label="Antworten"></div>
           <div class="mission-tip-col">
             <button type="button" class="btn btn--secondary btn--lg" id="btn-tip">Tipp</button>
-            <button type="button" class="btn btn--ghost btn--helper" id="btn-read" disabled>Vorlesen</button>
-            <button type="button" class="btn btn--ghost btn--helper" id="btn-solution-path" disabled>Rechenweg zeigen</button>
+            <button type="button" class="btn btn--ghost btn--helper" id="btn-read">Vorlesen</button>
+            <button type="button" class="btn btn--ghost btn--helper" id="btn-solution-path" hidden>Rechenweg zeigen</button>
           </div>
         </div>
 
         <p class="tip" id="mission-tip" hidden></p>
+        <p class="tip solution-box" id="mission-solution" hidden></p>
         <p class="feedback" id="mission-feedback" aria-live="assertive" hidden></p>
         <p class="success-flash" id="mission-success" hidden></p>
       </div>
