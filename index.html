@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathe-Stadt 100 — Schulfit für Klasse 2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" id="app">
+    <!-- Start -->
+    <section class="screen screen--active" id="screen-start" data-screen="start">
+      <div class="fest-banner" aria-hidden="true">
+        <span class="fest-flag"></span><span class="fest-flag"></span><span class="fest-flag"></span>
+      </div>
+      <header class="hero">
+        <h1>Mathe-Stadt 100</h1>
+        <p class="subtitle">Schulfit für Klasse 2</p>
+        <p class="lead">Hilf der Stadt beim Mathe-Fest. Löse Aufgaben, hilf den Bewohnern und öffne den Mathe-Schatz.</p>
+      </header>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-adventure">Abenteuer starten</button>
+      <button type="button" class="btn btn--ghost" id="btn-training">Übungsmodus</button>
+      <nav class="info-links" aria-label="Informationen">
+        <button type="button" class="info-link" id="btn-parents">Für Eltern</button>
+        <button type="button" class="info-link" id="btn-teachers">Für Lehrkräfte</button>
+      </nav>
+    </section>
+
+    <!-- Stadtkarte -->
+    <section class="screen screen--stadt" id="screen-stadt" data-screen="stadt">
+      <header class="stadt-header">
+        <p class="fest-label">🎉 Mathe-Fest — die Stadt braucht dich!</p>
+        <h2>Stadtkarte</h2>
+        <p class="hint" id="stadt-hint">Beginne am Zahlen-Tor.</p>
+      </header>
+      <div class="stadt-overview">
+        <div class="stadt-overview__top">
+          <span class="stadt-overview__label">Fest-Vorbereitung</span>
+          <span class="stadt-overview__count" id="city-progress-text">0 von 7 Zonen</span>
+        </div>
+        <div class="progress-bar progress-bar--city" role="progressbar" id="city-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-bar__fill" id="city-progress-fill"></div>
+        </div>
+        <div class="reward-strip" id="reward-strip" aria-label="Abzeichen"></div>
+      </div>
+      <div class="stadt-map-frame">
+        <div class="stadt-map" id="stadt-map" role="navigation" aria-label="Zonen"></div>
+      </div>
+    </section>
+
+    <!-- Zone: Missionsliste -->
+    <section class="screen" id="screen-zone" data-screen="zone">
+      <div class="zone-hero" id="zone-hero"></div>
+      <h2 id="zone-title"></h2>
+      <p class="zone-desc" id="zone-desc"></p>
+      <div class="mission-list" id="mission-list" role="list"></div>
+      <button type="button" class="btn btn--ghost" id="btn-zone-back">Zur Stadtkarte</button>
+    </section>
+
+    <!-- Missions-Intro -->
+    <section class="screen" id="screen-mission-intro" data-screen="missionIntro">
+      <div class="mission-intro-card">
+        <div class="mission-intro__scene" id="mission-intro-scene" aria-hidden="true"></div>
+        <p class="mission-intro__label">Neue Mission</p>
+        <h2 id="mission-intro-title"></h2>
+        <p id="mission-intro-text"></p>
+      </div>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-mission-go">Mission starten</button>
+      <button type="button" class="btn btn--ghost" id="btn-mission-intro-back">Zurück</button>
+    </section>
+
+    <!-- Mission spielen -->
+    <section class="screen" id="screen-mission" data-screen="mission">
+      <div class="mission-header">
+        <p class="mission-world" id="mission-zone-name"></p>
+        <p class="mission-title-small" id="mission-run-title"></p>
+        <div class="city-visual" id="city-visual" aria-hidden="true"></div>
+        <div class="progress-bar progress-bar--mission" role="progressbar" id="mission-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="progress-bar__fill" id="mission-progress-fill"></div>
+        </div>
+        <p class="progress" id="mission-progress" aria-live="polite"></p>
+      </div>
+      <div class="mission-card mission-play-card">
+        <div class="mission-grid">
+          <div class="mission-left">
+            <p class="scene-text" id="mission-scene"></p>
+          </div>
+          <div class="mission-right">
+            <p class="problem-text" id="mission-problem"></p>
+            <p class="question" id="mission-question"></p>
+          </div>
+        </div>
+
+        <div class="mission-answer-row">
+          <div class="answers" id="mission-answers" role="group" aria-label="Antworten"></div>
+          <div class="mission-tip-col">
+            <button type="button" class="btn btn--secondary btn--lg" id="btn-tip">Tipp</button>
+          </div>
+        </div>
+
+        <p class="feedback" id="mission-feedback" aria-live="assertive" hidden></p>
+        <p class="success-flash" id="mission-success" hidden></p>
+        <p class="tip" id="mission-tip" hidden></p>
+      </div>
+      <button type="button" class="btn btn--ghost btn--map-back" id="btn-mission-abort">Abbrechen</button>
+      <button type="button" class="btn btn--primary btn--lg btn--next" id="btn-mission-next" hidden>Weiter</button>
+    </section>
+
+    <!-- Mission geschafft -->
+    <section class="screen" id="screen-mission-done" data-screen="missionDone">
+      <div class="celebration-card">
+        <div class="celebration-card__scene" id="mission-done-scene" aria-hidden="true"></div>
+        <h2>Geschafft!</h2>
+        <p id="mission-done-help">Du hast der Stadt geholfen.</p>
+        <p class="reward-line" id="mission-done-reward"></p>
+        <p class="city-change" id="mission-done-city"></p>
+      </div>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-mission-done-next">Weiter</button>
+    </section>
+
+    <!-- Zone geschafft -->
+    <section class="screen" id="screen-zone-done" data-screen="zoneDone">
+      <div class="celebration-card celebration-card--zone">
+        <div class="zone-badge" id="zone-done-badge" aria-hidden="true"></div>
+        <h2 id="zone-done-title">Zone geschafft!</h2>
+        <p id="zone-done-text"></p>
+        <p class="unlock-note" id="zone-done-unlock" hidden></p>
+      </div>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-zone-done-map">Zur Stadtkarte</button>
+    </section>
+
+    <!-- Schatz -->
+    <section class="screen" id="screen-schatz" data-screen="schatz">
+      <div class="celebration-card celebration-card--treasure">
+        <div id="schatz-scene" aria-hidden="true"></div>
+        <h2>Mathe-Schatz geöffnet!</h2>
+        <p>Die Stadt ist bereit für das Mathe-Fest. Du warst ein echter Helfer!</p>
+      </div>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-schatz-map">Zur Stadtkarte</button>
+    </section>
+
+    <!-- Übungsmodus -->
+    <section class="screen" id="screen-training" data-screen="training">
+      <h2>Übungsmodus</h2>
+      <p class="hint">Hier übst du reine Rechenaufgaben ohne Geschichte.</p>
+      <div class="training-zones" id="training-zones"></div>
+      <button type="button" class="btn btn--ghost" id="btn-training-back">Zurück</button>
+    </section>
+
+    <!-- Info Eltern -->
+    <section class="screen" id="screen-parents" data-screen="parents">
+      <h2>Für Eltern</h2>
+      <div class="info-card">
+        <h3>Was übt dein Kind?</h3>
+        <p>Zahlenraum bis 100, Plus und Minus, Einmaleins, Sachaufgaben, Geld, Uhrzeit und einfache Knobelaufgaben — eingebettet in eine kleine Geschichte.</p>
+        <ul class="info-list">
+          <li>Keine Anmeldung</li>
+          <li>Keine Werbung</li>
+          <li>Keine Käufe</li>
+          <li>Keine Kinderdaten</li>
+          <li>Fortschritt nur lokal im Browser</li>
+        </ul>
+      </div>
+      <button type="button" class="btn btn--ghost" id="btn-parents-back">Zurück</button>
+    </section>
+
+    <!-- Info Lehrkräfte -->
+    <section class="screen" id="screen-teachers" data-screen="teachers">
+      <h2>Für Lehrkräfte</h2>
+      <div class="info-card">
+        <p>Mathe-Stadt 100 kann für <strong>Freiarbeit</strong>, <strong>Wochenplan</strong>, <strong>Förderzeit</strong>, <strong>Smartboard</strong> oder <strong>häusliches Üben</strong> genutzt werden.</p>
+        <h3>Themen</h3>
+        <p>Zahlenraum bis 100, Stellenwert, Plus/Minus, Einmaleins, Umkehraufgaben, Sachaufgaben, Geld, Uhrzeit und einfache gemischte Aufgaben.</p>
+      </div>
+      <button type="button" class="btn btn--ghost" id="btn-teachers-back">Zurück</button>
+    </section>
+  </main>
+  <script src="tasks.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
