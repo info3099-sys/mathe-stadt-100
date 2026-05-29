@@ -2,6 +2,14 @@
   "use strict";
 
   var PROGRESS_KEY = "mathe-stadt-100-v2";
+  var FINO_LINES = ["Komm, wir öffnen das Tor!", "Fast geschafft!", "Noch ein Schlüssel!", "Schau genau hin.", "Du hilfst der Stadt!"];
+  var GATE_REWARDS = [
+    "1. Zahlenschlüssel leuchtet!",
+    "2. Zahlenschlüssel leuchtet!",
+    "3. Zahlenschlüssel leuchtet!",
+    "Das Tor öffnet sich Stück für Stück!",
+    "Das Tor glüht für das Mathe-Fest!"
+  ];
 
   var SCENES = {
     "zahlen-tor":
@@ -111,6 +119,7 @@
   function initDom() {
     screens = {
       start: document.getElementById("screen-start"),
+      intro: document.getElementById("screen-intro"),
       stadt: document.getElementById("screen-stadt"),
       zone: document.getElementById("screen-zone"),
       missionIntro: document.getElementById("screen-mission-intro"),
@@ -267,7 +276,24 @@
       var t = getTask(id);
       if (t) tasks.push(t);
     });
+    if (state.currentMission && state.currentMission.id === "zt-m1") {
+      return tasks;
+    }
     return shuffle(tasks);
+  }
+
+  function setFinoText(target, text) {
+    var el = document.getElementById(target);
+    if (el) el.textContent = text;
+  }
+
+  function finoLine(index) {
+    return FINO_LINES[index % FINO_LINES.length];
+  }
+
+  function currentGateReward() {
+    var idx = Math.max(0, state.taskIndex - 1);
+    return GATE_REWARDS[Math.min(idx, GATE_REWARDS.length - 1)];
   }
 
   function buildTrainingRun(zoneId) {
@@ -414,6 +440,13 @@
     } else {
       hint.textContent = "Die Stadt ist bereit für das Mathe-Fest!";
     }
+    if (!isZoneUnlocked("baecker-gasse")) {
+      setFinoText("fino-map-text", "Komm, wir öffnen das Tor!");
+    } else if (!isZoneUnlocked("schatzplatz")) {
+      setFinoText("fino-map-text", "Du hilfst der Stadt!");
+    } else {
+      setFinoText("fino-map-text", "Fast geschafft!");
+    }
   }
 
   function openZone(zoneId) {
@@ -462,6 +495,7 @@
     document.getElementById("mission-zone-name").textContent = getZone(m.zoneId).title;
     document.getElementById("mission-run-title").textContent = m.missionTitle;
     setupCityVisual(m.microEffect, state.runTasks.length);
+    setFinoText("fino-mission-text", m.zoneId === "zahlen-tor" ? "Komm, wir öffnen das Tor!" : "Schau genau hin.");
     showScreen("mission");
     renderTask();
   }
@@ -479,6 +513,7 @@
     document.getElementById("mission-zone-name").textContent = getZone(zoneId).title + " — Übung";
     document.getElementById("mission-run-title").textContent = "Reine Rechenaufgaben";
     setupCityVisual(getZone(zoneId).microEffect, state.runTasks.length);
+    setFinoText("fino-mission-text", "Schau genau hin.");
     showScreen("mission");
     renderTask();
   }
@@ -492,8 +527,16 @@
       var step = document.createElement("span");
       step.className = "city-visual__step";
       step.setAttribute("data-step", String(i));
+      if (effect === "gate") {
+        step.innerHTML = "<span class='city-visual__icon'>Schlüssel</span>";
+      }
       el.appendChild(step);
     }
+    var reward = document.createElement("p");
+    reward.className = "city-visual__reward";
+    reward.id = "city-visual-reward";
+    reward.textContent = effect === "gate" ? "Das Tor wartet auf Zahlenschlüssel." : "Jede richtige Antwort hilft der Stadt.";
+    el.appendChild(reward);
   }
 
   function updateCityVisual() {
@@ -502,6 +545,10 @@
     var steps = el.querySelectorAll(".city-visual__step");
     for (var i = 0; i < steps.length; i++) {
       steps[i].classList.toggle("city-visual__step--on", i < state.taskIndex);
+    }
+    var reward = document.getElementById("city-visual-reward");
+    if (reward && state.taskIndex > 0) {
+      reward.textContent = state.currentMission && state.currentMission.zoneId === "zahlen-tor" ? currentGateReward() : "Du hilfst der Stadt!";
     }
   }
 
@@ -519,6 +566,7 @@
   function renderTask() {
     var task = state.runTasks[state.taskIndex];
     state.answered = false;
+    setFinoText("fino-mission-text", state.currentMission && state.currentMission.zoneId === "zahlen-tor" ? (state.taskIndex === 0 ? "Komm, wir öffnen das Tor!" : "Noch ein Schlüssel!") : "Schau genau hin.");
     updateMissionBar();
     var elScene = document.getElementById("mission-scene");
     var elProblem = document.getElementById("mission-problem");
@@ -574,11 +622,12 @@
       fb.textContent = "Richtig!";
       fb.classList.add("feedback--correct");
       var ok = document.getElementById("mission-success");
-      ok.textContent = task.successText || "Super!";
+      ok.textContent = state.currentMission && state.currentMission.zoneId === "zahlen-tor" ? currentGateReward() : (task.successText || "Super!");
       ok.hidden = false;
       state.taskIndex++;
       updateCityVisual();
       updateMissionBar();
+      setFinoText("fino-mission-text", state.taskIndex >= state.runTasks.length ? "Fast geschafft!" : "Noch ein Schlüssel!");
       document.getElementById("btn-mission-next").textContent = "Weiter";
       document.getElementById("btn-mission-next").hidden = false;
       return;
@@ -586,6 +635,7 @@
     btn.classList.add("answer-btn--wrong");
     fb.textContent = task.feedback[chosen] || "Versuch es noch einmal.";
     fb.classList.add("feedback--wrong");
+    setFinoText("fino-mission-text", "Schau genau hin.");
     document.getElementById("btn-mission-next").textContent = "Nochmal versuchen";
     document.getElementById("btn-mission-next").hidden = false;
   }
@@ -659,6 +709,9 @@
 
   function bindEvents() {
     document.getElementById("btn-adventure").addEventListener("click", function () {
+      showScreen("intro");
+    });
+    document.getElementById("btn-intro-help").addEventListener("click", function () {
       renderStadtMap();
       showScreen("stadt");
     });

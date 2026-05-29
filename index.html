@@ -26,6 +26,31 @@
       </nav>
     </section>
 
+    <!-- Intro: Hilferuf -->
+    <section class="screen screen--intro" id="screen-intro" data-screen="intro">
+      <div class="intro-rescue-card">
+        <div class="fino-guide fino-guide--intro" aria-label="Fino, der Stadtfuchs">
+          <div class="fino-avatar" aria-hidden="true">
+            <span class="fino-ear fino-ear--left"></span>
+            <span class="fino-ear fino-ear--right"></span>
+            <span class="fino-face"></span>
+          </div>
+          <div class="fino-bubble">
+            <strong>Fino, der Stadtfuchs</strong>
+            <span>Komm, wir öffnen das Tor!</span>
+          </div>
+        </div>
+        <div class="intro-gate" aria-hidden="true">
+          <span class="intro-gate__tower"></span>
+          <span class="intro-gate__door"></span>
+          <span class="intro-gate__tower"></span>
+        </div>
+        <h2>Oh nein!</h2>
+        <p class="intro-rescue-text">Das Mathe-Fest kann nicht starten.<br>Das Zahlen-Tor ist verschlossen.<br>Kannst du helfen?</p>
+      </div>
+      <button type="button" class="btn btn--primary btn--lg" id="btn-intro-help">Ja, ich helfe!</button>
+    </section>
+
     <!-- Stadtkarte -->
     <section class="screen screen--stadt" id="screen-stadt" data-screen="stadt">
       <header class="stadt-header">
@@ -33,6 +58,17 @@
         <h2>Stadtkarte</h2>
         <p class="hint" id="stadt-hint">Beginne am Zahlen-Tor.</p>
       </header>
+      <div class="fino-guide fino-guide--map" aria-label="Fino, der Stadtfuchs">
+        <div class="fino-avatar" aria-hidden="true">
+          <span class="fino-ear fino-ear--left"></span>
+          <span class="fino-ear fino-ear--right"></span>
+          <span class="fino-face"></span>
+        </div>
+        <div class="fino-bubble">
+          <strong>Fino, der Stadtfuchs</strong>
+          <span id="fino-map-text">Du hilfst der Stadt!</span>
+        </div>
+      </div>
       <div class="stadt-overview">
         <div class="stadt-overview__top">
           <span class="stadt-overview__label">Fest-Vorbereitung</span>
@@ -74,12 +110,23 @@
       <div class="mission-header">
         <p class="mission-world" id="mission-zone-name"></p>
         <p class="mission-title-small" id="mission-run-title"></p>
-        <div class="city-visual" id="city-visual" aria-hidden="true"></div>
+        <div class="fino-guide fino-guide--mission" aria-label="Fino, der Stadtfuchs">
+          <div class="fino-avatar" aria-hidden="true">
+            <span class="fino-ear fino-ear--left"></span>
+            <span class="fino-ear fino-ear--right"></span>
+            <span class="fino-face"></span>
+          </div>
+          <div class="fino-bubble">
+            <strong>Fino</strong>
+            <span id="fino-mission-text">Schau genau hin.</span>
+          </div>
+        </div>
         <div class="progress-bar progress-bar--mission" role="progressbar" id="mission-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <div class="progress-bar__fill" id="mission-progress-fill"></div>
         </div>
         <p class="progress" id="mission-progress" aria-live="polite"></p>
       </div>
+      <div class="city-visual" id="city-visual" aria-hidden="true"></div>
       <div class="mission-card mission-play-card">
         <div class="mission-grid">
           <div class="mission-left">
@@ -95,12 +142,14 @@
           <div class="answers" id="mission-answers" role="group" aria-label="Antworten"></div>
           <div class="mission-tip-col">
             <button type="button" class="btn btn--secondary btn--lg" id="btn-tip">Tipp</button>
+            <button type="button" class="btn btn--ghost btn--helper" id="btn-read" disabled>Vorlesen</button>
+            <button type="button" class="btn btn--ghost btn--helper" id="btn-solution-path" disabled>Rechenweg zeigen</button>
           </div>
         </div>
 
+        <p class="tip" id="mission-tip" hidden></p>
         <p class="feedback" id="mission-feedback" aria-live="assertive" hidden></p>
         <p class="success-flash" id="mission-success" hidden></p>
-        <p class="tip" id="mission-tip" hidden></p>
       </div>
       <button type="button" class="btn btn--ghost btn--map-back" id="btn-mission-abort">Abbrechen</button>
       <button type="button" class="btn btn--primary btn--lg btn--next" id="btn-mission-next" hidden>Weiter</button>

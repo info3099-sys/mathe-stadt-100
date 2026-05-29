@@ -1622,3 +1622,437 @@ body {
     min-height: 178px;
   }
 }
+
+/* Version 0.2 Schritt 1: Einstieg, Fino und sichtbare Belohnungen */
+.screen--intro {
+  align-items: center;
+  text-align: center;
+}
+
+.intro-rescue-card {
+  width: 100%;
+  max-width: 620px;
+  padding: 1.25rem;
+  border: 3px solid #ffd15c;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255, 209, 92, 0.28), transparent 9rem),
+    linear-gradient(180deg, #fffdf7 0%, #fff1c9 100%);
+  box-shadow: var(--shadow);
+}
+
+.intro-rescue-card h2 {
+  margin-top: 0.4rem;
+  color: #b16018;
+  font-size: clamp(1.8rem, 5vw, 2.7rem);
+}
+
+.intro-rescue-text {
+  margin: 0.55rem 0 0;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  line-height: 1.45;
+  font-weight: 750;
+  color: #2d4b5f;
+}
+
+.intro-gate {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 128px;
+  margin: 1rem auto 0.35rem;
+}
+
+.intro-gate__tower,
+.intro-gate__door {
+  display: block;
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.08);
+}
+
+.intro-gate__tower {
+  width: 58px;
+  height: 105px;
+  border-radius: 14px 14px 7px 7px;
+  background: #6f91b8;
+  border: 4px solid #4f7199;
+}
+
+.intro-gate__door {
+  width: 112px;
+  height: 88px;
+  border-radius: 55px 55px 10px 10px;
+  background: #516b8c;
+  border: 5px solid #3f5572;
+  position: relative;
+}
+
+.intro-gate__door::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffd15c;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 18px rgba(255, 209, 92, 0.8);
+}
+
+.fino-guide {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.fino-guide--map,
+.fino-guide--mission {
+  width: 100%;
+}
+
+.fino-guide--mission {
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.fino-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 58px;
+}
+
+.fino-ear {
+  position: absolute;
+  top: 0;
+  width: 25px;
+  height: 31px;
+  background: #e8793e;
+  border: 3px solid #9d4f2d;
+  transform: rotate(34deg);
+  border-radius: 8px 8px 2px 8px;
+}
+
+.fino-ear--left {
+  left: 6px;
+  transform: rotate(-34deg);
+}
+
+.fino-ear--right {
+  right: 6px;
+}
+
+.fino-face {
+  position: absolute;
+  left: 7px;
+  bottom: 0;
+  width: 50px;
+  height: 43px;
+  border-radius: 52% 52% 45% 45%;
+  background:
+    radial-gradient(circle at 34% 45%, #26384c 0 2px, transparent 3px),
+    radial-gradient(circle at 66% 45%, #26384c 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 65%, #26384c 0 4px, transparent 5px),
+    linear-gradient(140deg, #e8793e 0 34%, #fff2d3 35% 66%, #e8793e 67%);
+  border: 3px solid #9d4f2d;
+}
+
+.fino-bubble {
+  position: relative;
+  min-width: 0;
+  padding: 0.75rem 0.95rem;
+  border: 3px solid #ffd15c;
+  border-radius: 16px;
+  background: #fffdf7;
+  color: #26384c;
+  box-shadow: 0 8px 18px rgba(104, 72, 34, 0.12);
+  text-align: left;
+}
+
+.fino-bubble::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 24px;
+  width: 18px;
+  height: 18px;
+  background: #fffdf7;
+  border-left: 3px solid #ffd15c;
+  border-bottom: 3px solid #ffd15c;
+  transform: rotate(45deg);
+}
+
+.fino-bubble strong,
+.fino-bubble span {
+  display: block;
+}
+
+.fino-bubble strong {
+  color: #b16018;
+  font-size: 0.85rem;
+}
+
+.fino-bubble span {
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.city-visual {
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.8rem;
+  border-radius: 18px;
+  background: #fff8d7;
+  border: 3px solid #ffd15c;
+}
+
+.city-visual__step {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 3px solid #d7c8aa;
+  background: #f2ead9;
+}
+
+.city-visual__icon {
+  width: 34px;
+  height: 34px;
+  color: transparent;
+  border-radius: 50%;
+  background: #b8b7ad;
+  position: relative;
+}
+
+.city-visual__icon::after {
+  content: "";
+  position: absolute;
+  right: -14px;
+  top: 13px;
+  width: 22px;
+  height: 8px;
+  border-radius: 4px;
+  background: inherit;
+  box-shadow: 10px 0 0 -2px currentColor;
+}
+
+.city-visual__step--on {
+  border-color: #f0a83a;
+  background: #fff1ad;
+  box-shadow: 0 0 0 5px rgba(255, 209, 92, 0.28), 0 8px 16px rgba(177, 96, 24, 0.18);
+}
+
+.city-visual--gate .city-visual__step--on {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #fff1ad;
+}
+
+.city-visual__step--on .city-visual__icon {
+  background: #f0a83a;
+  color: #f0a83a;
+  box-shadow: 0 0 18px rgba(240, 168, 58, 0.85);
+}
+
+.city-visual__reward {
+  flex-basis: 100%;
+  margin: 0.45rem 0 0;
+  color: #a26316;
+  font-weight: 900;
+  font-size: 1.08rem;
+}
+
+.success-flash {
+  border: 3px solid #ffd15c;
+  background: #fff8d7;
+  color: #267a6b;
+  font-size: 1.12rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(104, 72, 34, 0.12);
+}
+
+@media (max-width: 560px) {
+  .fino-guide {
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+
+  .fino-avatar {
+    width: 54px;
+    height: 50px;
+  }
+
+  .fino-face {
+    width: 44px;
+    height: 38px;
+  }
+
+  .fino-ear {
+    width: 21px;
+    height: 27px;
+  }
+
+  .city-visual__step,
+  .city-visual--gate .city-visual__step--on {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Vertikaler Missionsbildschirm */
+#screen-mission {
+  align-items: center;
+}
+
+#screen-mission .mission-header,
+#screen-mission .mission-play-card {
+  width: 100%;
+  max-width: 820px;
+}
+
+#screen-mission .mission-header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.55rem;
+}
+
+#screen-mission .mission-play-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 1.35rem);
+}
+
+#screen-mission .mission-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: stretch;
+}
+
+#screen-mission .mission-left,
+#screen-mission .mission-right {
+  width: 100%;
+  min-width: 0;
+}
+
+#screen-mission .mission-grid p,
+#screen-mission .scene-text,
+#screen-mission .problem-text,
+#screen-mission .question {
+  width: 100%;
+  max-width: none;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
+
+#screen-mission .scene-text,
+#screen-mission .problem-text {
+  white-space: pre-line;
+}
+
+#screen-mission .scene-text {
+  margin: 0;
+  padding: 1rem;
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+
+#screen-mission .problem-text {
+  margin: 0;
+  color: #34546b;
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+#screen-mission .question {
+  margin: 0.35rem 0 0;
+  text-align: left;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  line-height: 1.25;
+}
+
+#screen-mission .mission-answer-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  align-items: stretch;
+}
+
+#screen-mission .answers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  width: 100%;
+  margin: 0;
+}
+
+#screen-mission .answer-btn {
+  min-width: 0;
+  min-height: 68px;
+  padding: 1rem 0.7rem;
+  line-height: 1.2;
+}
+
+#screen-mission .mission-tip-col {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0;
+}
+
+#screen-mission .mission-tip-col .btn {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  min-height: 54px;
+  padding: 0.75rem 0.65rem;
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+
+#screen-mission .btn--helper:disabled {
+  opacity: 0.58;
+  cursor: default;
+}
+
+#screen-mission .feedback,
+#screen-mission .success-flash,
+#screen-mission .tip {
+  width: 100%;
+  margin: 0;
+}
+
+#screen-mission .btn--next {
+  width: 100%;
+  max-width: 420px;
+}
+
+@media (max-width: 620px) {
+  #screen-mission .mission-tip-col {
+    grid-template-columns: 1fr;
+  }
+
+  #screen-mission .mission-tip-col .btn {
+    min-height: 56px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 430px) {
+  #screen-mission .answers {
+    grid-template-columns: 1fr;
+  }
+}
